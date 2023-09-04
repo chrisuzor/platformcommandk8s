@@ -1,0 +1,31 @@
+apiVersion: apps/v1 # version of kubernetes
+kind: Deployment # type of object
+metadata:
+  name: commands-depl # name of deployment
+spec:
+  replicas: 1 # number of pods
+  selector:
+    matchLabels:
+      app: commandservice # label of pod
+  template:
+    metadata:
+      labels:
+        app: commandservice # label of pod
+    spec:
+      containers:
+        - name: commandservice # name of container
+          image: chrisuzor/commandservice:latest # image name
+---
+apiVersion: v1 # version of kubernetes
+kind: Service # type of object
+metadata:
+  name: commands-clusterip-srv # name of service
+spec:
+  type: ClusterIP # type of service
+  selector:
+    app: commandservice # label of pod
+  ports:
+    - name: commandservice # name of port
+      protocol: TCP # protocol
+      port: 80 # port
+      targetPort: 80 # port of container

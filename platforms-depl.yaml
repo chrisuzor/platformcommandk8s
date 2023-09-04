@@ -1,0 +1,36 @@
+apiVersion: apps/v1 # version of kubernetes
+kind: Deployment # type of object
+metadata:
+  name: platforms-depl # name of deployment
+spec:
+    replicas: 1 # number of pods
+    selector:
+      matchLabels:
+        app: platformservice # label of pod
+    template:
+      metadata:
+        labels:
+          app: platformservice # label of pod
+      spec:
+        containers:
+          - name: platformservice # name of container
+            image: chrisuzor/platformservice:latest # image name
+---
+apiVersion: v1 # version of kubernetes
+kind: Service # type of object
+metadata:
+  name: platforms-clusterip-srv # name of service
+spec:
+    type: ClusterIP # type of service
+    selector:
+        app: platformservice # label of pod
+    ports:
+    - name: platformservice # name of port
+      protocol: TCP # protocol
+      port: 80 # port
+      targetPort: 80 # port of container
+    - name: platformgrpc # name of port
+      protocol: TCP # protocol
+      port: 666 # port
+      targetPort: 666 # port of container
+        
